@@ -1,2 +1,5 @@
 # twitterBot
-learning to make a twitter bot
+Using to test twitter archiving
+
+new features: pulling a file and saving it to heroku ephemeral drive
+uploading a file to post on twitter
