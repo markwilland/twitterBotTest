@@ -1,5 +1,6 @@
 from tweepy import API
 from tweepy import OAuthHandler
+import requests
 import sys
 from os import environ
 from time import sleep
@@ -23,6 +24,19 @@ def authenticate_twitter_app(context):
 # format JSON for debugging
 def pretify_json(obj):
     return json.dumps(obj, indent=4, sort_keys=True)
+
+def img_from(url):
+    with open('tweet_image.jpg', 'wb') as handle:
+        response = requests.get(url, stream=True)
+
+        if not response.ok:
+            print('Image download failed. Response: %s' % response)
+
+        for block in response.iter_content(1024):
+            if not block:
+                break
+
+            handle.write(block)
 
 # returns a timestamp of the last tweet
 def get_last_tweet(api):
@@ -55,9 +69,9 @@ def post_tweet_from_link(api, tweet_url):
     print('Got tweet id from url: %s' % tweet_id)
 
     tweet = api.statuses_lookup(id_=[tweet_id], tweet_mode='extended')
-    print(tweet[0]._json['full_text'])
+    print(pretify_json(tweet[0]._json))
 
-    return tweet[0]._json['full_text']
+    return (tweet[0]._json['full_text'], 'temp')
 
 # def get_tweet(api, tweet_url):
 #     tweet_id = int(tweet_url.rsplit('/', 1)[-1])
@@ -93,12 +107,12 @@ def post_next_tweets(api, last_tweet_timestamp):
     
     print('list of new posts: %s' % list(reversed(next_posts)))
 
-    for post in reversed(next_posts):
-        print('Making new post: %s' % post)
-        api.update_status(post_tweet_from_link(api, post['url']))
-        latest_timestamp = post['timestamp']
-
-    return latest_timestamp
+    # for post in reversed(next_posts):
+    #     print('Making new post: %s' % post)
+    #     api.update_status(post_tweet_from_link(api, post['url']))
+    #     latest_timestamp = post['timestamp']
+    print('done')
+    return
 
 if __name__ == '__main__':
     # main loop
@@ -107,14 +121,18 @@ if __name__ == '__main__':
     # heroku = running from server, anything else = local
     auth = authenticate_twitter_app('local')
     api = API(auth)
-    print('Authentication successful!')
 
-    print('Looking for latest tweet on timeline...')
-    last_tweet_timestamp = get_last_tweet(api)
     
-    while True:
-        print('Current latest tweet posted at: %s' % last_tweet_timestamp)
+
+
+    # print('Authentication successful!')
+
+    # print('Looking for latest tweet on timeline...')
+    # last_tweet_timestamp = get_last_tweet(api)
+    
+    # while True:
+    #     print('Current latest tweet posted at: %s' % last_tweet_timestamp)
         
-        last_tweet_timestamp = post_next_tweets(api, last_tweet_timestamp)
-        print('Waiting 5 minutes....')
-        sleep(300)
+    #     last_tweet_timestamp = post_next_tweets(api, last_tweet_timestamp)
+    #     print('Waiting 5 minutes....')
+    #     sleep(300)
