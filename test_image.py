@@ -37,9 +37,9 @@ if __name__ == '__main__':
     
     filename = dl_img('https://pbs.twimg.com/media/E1zDJ6pWQAMP8C4?format=jpg&name=large')
 
-    # auth = archivebot.authenticate_twitter_app('local')
-    # api = API(auth)
+    auth = archivebot.authenticate_twitter_app('local')
+    api = API(auth)
 
-    # archivebot.post_tweet_from_link(api, 'https://twitter.com/tpiketest2/status/1395204565964894212')
+    archivebot.post_tweet_from_link(api, 'https://twitter.com/tpiketest2/status/1395204565964894212')
 
-    #api.update_with_media(filename, 'Hello everybody check out this repost')
+    api.update_with_media(filename, 'Hello everybody check out this repost')
