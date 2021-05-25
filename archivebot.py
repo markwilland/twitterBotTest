@@ -73,17 +73,20 @@ def post_tweet_from_link(api, tweet_url):
     print(pretify_json(tweet_json))
 
     # checks if there are attached images
+    imgs = []
     if 'media' in tweet_json['entities']:
         print('%s image(s) found in tweet' % len(tweet_json['entities']['media']))
         
         for img in tweet_json['entities']['media']:
             print('Image url: %s' % img['media_url'])
+            imgs.append(img['media_url'])
     
-    
+        print(imgs)
+
     else:
         print('No images attached')
 
-    return (tweet_json['full_text'], 'temp')
+    return (tweet_json['full_text'], imgs)
 
 # def get_tweet(api, tweet_url):
 #     tweet_id = int(tweet_url.rsplit('/', 1)[-1])
