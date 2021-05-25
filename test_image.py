@@ -29,7 +29,7 @@ def check_img_file(filename):
         return filename + str(file_num)
 
     while path.exists('%s%s.jpg' % (filename, file_num)):
-        file_num += 1
+        file_num += 12
 
     return filename + str(file_num)
 
